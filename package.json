@@ -1,0 +1,8 @@
+{
+  "name": "tg-random",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "npx serve webapp -l 3000",
+    "dev": "npx serve webapp -l 3000"
+  }
+}

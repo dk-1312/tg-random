@@ -1,0 +1,173 @@
+:root {
+  --bg: #0f172a;
+  --card: #1e293b;
+  --border: #334155;
+  --text: #e2e8f0;
+  --muted: #94a3b8;
+  --accent: #3b82f6;
+  --accent-hover: #2563eb;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+
+.wrap {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 20px 16px 32px;
+}
+
+.view.hidden {
+  display: none;
+}
+
+h1 {
+  margin: 0 0 8px;
+  font-size: 1.5rem;
+}
+
+h2 {
+  margin: 24px 0 12px;
+  font-size: 1.1rem;
+}
+
+h3 {
+  margin: 0 0 8px;
+  font-size: 0.95rem;
+}
+
+.hint,
+.meta {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 14px;
+  text-align: left;
+}
+
+.field span {
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+input {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--text);
+  font-size: 16px;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.btn {
+  width: 100%;
+  border: 0;
+  border-radius: 12px;
+  padding: 12px 16px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.btn.primary {
+  background: var(--accent);
+  color: white;
+}
+
+.btn.primary:hover:not(:disabled) {
+  background: var(--accent-hover);
+}
+
+.btn.primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn.ghost {
+  margin-top: 16px;
+  background: transparent;
+  color: var(--muted);
+  border: 1px solid var(--border);
+}
+
+.wheel {
+  width: 140px;
+  height: 140px;
+  margin: 20px auto;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  font-size: 52px;
+  background: var(--card);
+  border: 3px solid var(--border);
+  transition: transform 2s cubic-bezier(0.17, 0.67, 0.16, 1.02);
+}
+
+.wheel.spin {
+  transform: rotate(1440deg);
+}
+
+.status {
+  min-height: 24px;
+  margin: 12px 0 0;
+  text-align: center;
+  font-size: 1.05rem;
+}
+
+.results {
+  margin-top: 8px;
+}
+
+.teams {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.team-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px;
+  text-align: left;
+}
+
+.team-card ul {
+  margin: 0;
+  padding-left: 18px;
+}
+
+.team-card li {
+  margin-bottom: 4px;
+}
+
+.team-card li.empty {
+  list-style: none;
+  padding-left: 0;
+  margin-left: -18px;
+  color: var(--muted);
+}

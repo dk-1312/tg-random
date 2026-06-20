@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Футбольный барабан</title>
+    <link rel="stylesheet" href="./styles.css" />
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  </head>
+  <body>
+    <main class="wrap">
+      <section id="setupView" class="view hidden">
+        <h1>Новая игра</h1>
+        <p class="hint">Настрой команды и передай телефон игрокам по очереди</p>
+
+        <label class="field">
+          <span>Название игры</span>
+          <input id="titleInput" type="text" value="Пятничный футбол" />
+        </label>
+
+        <div class="row">
+          <label class="field">
+            <span>Команда 1</span>
+            <input id="teamAInput" type="text" value="Синие" />
+          </label>
+          <label class="field">
+            <span>Команда 2</span>
+            <input id="teamBInput" type="text" value="Красные" />
+          </label>
+        </div>
+
+        <label class="field">
+          <span>Игроков в каждой команде</span>
+          <input id="teamSizeInput" type="number" min="1" max="11" value="5" />
+        </label>
+
+        <button id="createBtn" class="btn primary">Начать игру</button>
+      </section>
+
+      <section id="gameView" class="view hidden">
+        <header class="header">
+          <h1 id="gameTitle">Игра</h1>
+          <p id="gameMeta" class="meta"></p>
+        </header>
+
+        <label class="field">
+          <span>Твоё имя</span>
+          <input id="nameInput" type="text" placeholder="Введи имя" />
+        </label>
+
+        <div id="wheel" class="wheel">⚽</div>
+
+        <button id="spinBtn" class="btn primary">Крутить барабан</button>
+        <p id="status" class="status"></p>
+
+        <section class="results">
+          <h2>Составы</h2>
+          <div class="teams">
+            <div class="team-card">
+              <h3 id="teamALabel">Команда 1</h3>
+              <ul id="teamAList"></ul>
+            </div>
+            <div class="team-card">
+              <h3 id="teamBLabel">Команда 2</h3>
+              <ul id="teamBList"></ul>
+            </div>
+          </div>
+        </section>
+
+        <button id="resetBtn" class="btn ghost">Новая игра</button>
+      </section>
+    </main>
+
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>
