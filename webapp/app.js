@@ -40,25 +40,22 @@ function showView(view) {
   gameView.classList.toggle("hidden", view !== "game");
 }
 
-function getTelegramUser() {
-  const user = tg?.initDataUnsafe?.user;
-  if (!user) return null;
-  return {
-    id: String(user.id),
-    name: user.first_name || user.username || `User ${user.id}`,
-  };
+function playerId(name) {
+  return `name:${name.trim().toLowerCase()}`;
 }
 
 function getCurrentPlayer() {
-  const tgUser = getTelegramUser();
-  const name = nameInput.value.trim() || tgUser?.name || "";
-
+  const name = nameInput.value.trim();
   if (!name) return null;
 
   return {
-    id: tgUser?.id ?? `local:${name.toLowerCase()}`,
+    id: playerId(name),
     name,
   };
+}
+
+function findPlayerByName(game, name) {
+  return game.players.find((p) => p.id === playerId(name));
 }
 
 function renderResults(game) {
@@ -78,32 +75,44 @@ function renderResults(game) {
   gameMeta.textContent = `${results.total} / ${results.capacity} игроков`;
 }
 
-function renderGame(game) {
-  gameTitle.textContent = game.title;
-  teamALabel.textContent = game.teamAName;
-  teamBLabel.textContent = game.teamBName;
-  renderResults(game);
-
-  const tgUser = getTelegramUser();
-  if (tgUser && !nameInput.value) {
-    nameInput.value = tgUser.name;
-  }
-
-  const player = getCurrentPlayer();
-  if (player) {
-    const existing = game.players.find((p) => p.id === player.id);
-    if (existing?.team) {
-      const teamName = existing.team === "A" ? game.teamAName : game.teamBName;
-      statusEl.textContent = `Ты уже в команде: ${teamName}`;
-      spinBtn.disabled = true;
-      return;
-    }
-  }
-
+function updateSpinState(game, statusMessage = "") {
   const results = getResults(game);
   const isFull = results.teamA.length + results.teamB.length >= results.capacity;
-  spinBtn.disabled = isFull;
-  statusEl.textContent = isFull ? "Все места заняты" : "";
+  const name = nameInput.value.trim();
+
+  if (isFull) {
+    spinBtn.disabled = true;
+    statusEl.textContent = statusMessage || "Все места заняты";
+    return;
+  }
+
+  if (!name) {
+    spinBtn.disabled = true;
+    statusEl.textContent = statusMessage;
+    return;
+  }
+
+  const existing = findPlayerByName(game, name);
+  if (existing?.team) {
+    const teamName = existing.team === "A" ? game.teamAName : game.teamBName;
+    spinBtn.disabled = true;
+    statusEl.textContent = statusMessage || `${name} уже в команде: ${teamName}`;
+    return;
+  }
+
+  spinBtn.disabled = false;
+  statusEl.textContent = statusMessage;
+}
+
+function renderGame(game, statusMessage = "") {
+  gameTitle.textContent = game.title;
+  renderResults(game);
+  updateSpinState(game, statusMessage);
+}
+
+function prepareNextPlayer() {
+  nameInput.value = "";
+  nameInput.focus();
 }
 
 function init() {
@@ -111,6 +120,7 @@ function init() {
   if (game) {
     showView("game");
     renderGame(game);
+    nameInput.focus();
   } else {
     showView("setup");
   }
@@ -135,6 +145,7 @@ createBtn.addEventListener("click", () => {
   });
 
   showView("game");
+  prepareNextPlayer();
   renderGame(game);
 });
 
@@ -156,15 +167,16 @@ spinBtn.addEventListener("click", async () => {
     await wait(1800);
 
     const result = spin(game, player);
-    statusEl.textContent = result.already
-      ? `Ты уже в команде: ${result.team}`
-      : `Твоя команда: ${result.team}`;
+    const message = result.already
+      ? `${player.name} уже в команде: ${result.team}`
+      : `${player.name} → ${result.team}`;
 
-    renderGame(result.game);
+    prepareNextPlayer();
+    renderGame(result.game, message);
   } catch (e) {
     statusEl.textContent =
       e.message === "TEAMS_FULL" ? "Все места заняты" : "Что-то пошло не так";
-    spinBtn.disabled = false;
+    updateSpinState(game);
   } finally {
     wheel.classList.remove("spin");
   }
@@ -173,8 +185,6 @@ spinBtn.addEventListener("click", async () => {
 nameInput.addEventListener("input", () => {
   const game = loadGame();
   if (!game) return;
-  spinBtn.disabled = false;
-  statusEl.textContent = "";
   renderGame(game);
 });
 
@@ -184,6 +194,7 @@ resetBtn.addEventListener("click", () => {
   showView("setup");
   statusEl.textContent = "";
   spinBtn.disabled = false;
+  nameInput.value = "";
 });
 
 init();
