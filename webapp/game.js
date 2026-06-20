@@ -34,6 +34,20 @@ function countTeam(players, team) {
   return players.filter((p) => p.team === team).length;
 }
 
+function pickBalancedTeam(countA, countB, freeA, freeB) {
+  if (freeA <= 0) return "B";
+  if (freeB <= 0) return "A";
+
+  const assigned = countA + countB;
+  if (assigned === 0) {
+    return Math.random() < 0.5 ? "A" : "B";
+  }
+
+  // Чем больше игроков в команде, тем ниже шанс попасть в неё снова
+  const probA = countB / assigned;
+  return Math.random() < probA ? "A" : "B";
+}
+
 export function spin(game, player) {
   const existing = game.players.find((p) => p.id === player.id);
   if (existing?.team) {
@@ -54,12 +68,7 @@ export function spin(game, player) {
     throw new Error("TEAMS_FULL");
   }
 
-  let team;
-  if (freeA > 0 && freeB > 0) {
-    team = Math.random() < 0.5 ? "A" : "B";
-  } else {
-    team = freeA > 0 ? "A" : "B";
-  }
+  let team = pickBalancedTeam(countA, countB, freeA, freeB);
 
   if (existing) {
     existing.team = team;
