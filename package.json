@@ -5,7 +5,13 @@
   "scripts": {
     "start": "node src/bot/index.js",
     "dev": "node --watch src/bot/index.js",
-    "webapp": "npx serve webapp -l 3000"
+    "webapp": "npx serve webapp -l 3000",
+    "pm2:start": "pm2 start ecosystem.config.cjs",
+    "pm2:restart": "pm2 restart tg-random-bot",
+    "pm2:logs": "pm2 logs tg-random-bot"
+  },
+  "engines": {
+    "node": ">=18"
   },
   "dependencies": {
     "dotenv": "^16.4.5",
