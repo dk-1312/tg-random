@@ -1,8 +1,16 @@
 {
   "name": "tg-random",
   "version": "1.0.0",
+  "type": "module",
   "scripts": {
-    "start": "npx serve webapp -l 3000",
-    "dev": "npx serve webapp -l 3000"
+    "start": "node src/bot/index.js",
+    "dev": "node --watch src/bot/index.js",
+    "webapp": "npx serve webapp -l 3000"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "luxon": "^3.5.0",
+    "node-cron": "^3.0.3",
+    "telegraf": "^4.16.3"
   }
 }
