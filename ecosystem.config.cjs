@@ -3,7 +3,7 @@ module.exports = {
     {
       name: "tg-random-bot",
       script: "src/bot/index.js",
-      cwd: __dirname + "/..",
+      cwd: __dirname,
       instances: 1,
       autorestart: true,
       watch: false,
